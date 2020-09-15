@@ -27,6 +27,10 @@ db = scoped_session(sessionmaker(bind=engine))
 def index():
     return render_template("index.html")
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
 @app.route("/books")
 def books():
     return render_template("books.html", books=Books)
@@ -75,6 +79,8 @@ def login():
         else:
             for password_data in password_db:
                 if sha256_crypt.verify(password, password_data):
+
+                    session["log"]=True
                     flash("Congratulation you are now log in", "success")
                     return redirect(url_for("books"))
                 else:
@@ -85,6 +91,12 @@ def login():
 @app.route("/search")
 def search():  
     return render_template("search.html") 
+
+@app.route("/logout")
+def logout(): 
+    session.clear()
+    flash ("you log out ", "success") 
+    return redirect(url_for("index")) 
 
 
 if __name__ == "__main__":
