@@ -36,29 +36,14 @@ def book(isbn):
     return render_template("book.html", isbn=isbn)
 
 
-class RegisterForm(Form):
-    name=StringField('Name', [validators.length(min=1, max=50)])
-    email=StringField('Email', [validators.length(min=1, max=50)])
-    username=StringField('Username', [validators.length(min=1, max=25)])
-    password=PasswordField('Password', [
-        validators.DataRequired(),
-        validators.EqualTo('confirm', message= 'Password do not match')
-    ])
-    confirm= PasswordField("Confirm Password")
+
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
-    form =RegisterForm(request.form)
-    if request.method== 'POST' and form.validate():
-        name =form.name.data
-        email=form.email.data
-        username=form.username.data
-        password=sha256_crypt.encrypt(str(form.password.data))
-        db.execute("INSERT INTO users (name, email, username, password) VALUES (:name, :email, :username,:password)",
-            {"name": name, "email": email, "username":username, "password": password })
-        db.commit()
-        flash ('You are now regirter', 'Success')
-        redirect(url_for('index'))
 
-        return render_template("register.html")
-    return render_template("register.html", form=form)
+    return render_template("register.html")
+
+@app.route("/login")
+def login():
+    
+    return render_template("login.html")
